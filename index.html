@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Battle Timer</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font: 13px Helvetica, Arial; }
+        </style>
+    </head>
+    <body>
+        <button id="btnSimulate">Simulate</button>
+        <h2><span id="player_1">0:00.000</span></h2>
+        <h2><span id="player_2">0:00.000</span></h2>
+        <h2><span id="player_3">0:00.000</span></h2>
+        <h2><span id="player_4">0:00.000</span></h2>
+        <h2><span id="player_5">0:00.000</span></h2>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+            var timerFunc;
+            socket.on('begin', (data) => {
+                startTimer();
+            });
+    
+            socket.on('player_finished', (player) => {
+                playerFinished(player);
+            });
+            var beginTime = 0;
+            var players = [
+                ['Player 1', 'player_1', '0:00.000', false],
+                ['Player 2', 'player_2', '0:00.000', false],
+                ['Player 3', 'player_3', '0:00.000', false],
+                ['Player 4', 'player_4', '0:00.000', false],
+                ['Player 5', 'player_5', '0:00.000', false]
+            ];
+            var playersRemaining = players.length;
+
+
+            document.getElementById('btnSimulate').addEventListener("click", () => {
+                socket.emit('simulate', {players: players, maxLength: 30}, (data) => {console.log(data)});
+            });
+
+            function startTimer() {
+                beginTime = new Date(Date.now()).getTime();
+                timerFunc = setInterval(() => {
+                    const elapsed = new Date(Date.now()).getTime() - beginTime;
+                    const formattedTime = formatTime(elapsed);
+                    updateTimes(formattedTime);
+                }, 1)
+            }
+
+            function updateTimes(newTime) {
+                players.forEach((player) => {
+                    if (!player[3]) {
+                        player[2] = newTime;
+                    }
+                    drawTime(player);
+                });
+            }
+
+            function drawTime(player) {
+                document.getElementById(player[1]).innerHTML =player[2];
+            }
+
+            function formatTime(milli) {
+                const minutes = Math.floor(milli / 1000 / 60).toString();
+                const seconds = (Math.floor(milli / 1000) % 60).toString().padStart(2, '0');
+                const ms = (milli % 1000).toString().padStart(3, '0');
+                const time = minutes + ':' + seconds + '.' + ms;
+                return time;
+                    
+            }
+
+            function playerFinished(player) {
+                const name = player[0];
+                const idx = players.findIndex((x) => {
+                    return x[0] === player[0];
+                });
+                players[idx] = player;
+                playersRemaining--;
+                if (!playersRemaining) {
+                    clearInterval(timerFunc);
+                }
+            }
+        </script>
+    </body>
+</html>
