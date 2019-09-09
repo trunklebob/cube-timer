@@ -33,12 +33,12 @@
 
             document.getElementById('btnSimulate').addEventListener("click", () => {
                 players = [
-                    ['Player 1', 'player_1', '0:00.000', false],
-                    ['Player 2', 'player_2', '0:00.000', false],
-                    ['Player 3', 'player_3', '0:00.000', false],
-                    ['Player 4', 'player_4', '0:00.000', false],
-                    ['Player 5', 'player_5', '0:00.000', false]
-                ]
+                    {name: 'Player 1', id: 'player_1', time: '0:00.000', finished: false},
+                    {name: 'Player 2', id: 'player_2', time: '0:00.000', finished: false},
+                    {name: 'Player 3', id: 'player_3', time: '0:00.000', finished: false},
+                    {name: 'Player 4', id: 'player_4', time: '0:00.000', finished: false},
+                    {name: 'Player 5', id: 'player_5', time: '0:00.000', finished: false},
+                ];
                 socket.emit('simulate', {players: players, maxLength: 5}, (data) => {console.log(data)});
             });
 
@@ -53,15 +53,15 @@
 
             function updateTimes(newTime) {
                 players.forEach((player) => {
-                    if (!player[3]) {
-                        player[2] = newTime;
+                    if (!player.finished) {
+                        player.time = newTime;
                     }
                     drawTime(player);
                 });
             }
 
             function drawTime(player) {
-                document.getElementById(player[1]).innerHTML =player[2];
+                document.getElementById(player.id).innerHTML = player.time;
             }
 
             function formatTime(milli) {
@@ -74,9 +74,8 @@
             }
 
             function playerFinished(player) {
-                const name = player[0];
                 const idx = players.findIndex((x) => {
-                    return x[0] === player[0];
+                    return x.id === player.id;
                 });
                 players[idx] = player;
                 playersRemaining--;

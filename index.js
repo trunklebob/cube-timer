@@ -51,16 +51,17 @@ function simEvent(players, maxLength) {
     });
 
     function playerFinished(player) {
-        const finishedPlayer = [...player];
-        finishedPlayer[2] = timer.currTime();
-        finishedPlayer[3] = true;
+        const finishedPlayer = { ...player };
+        finishedPlayer.time = timer.currTime();
+        finishedPlayer.finished = true;
         playersRemaining--;
         if (!playersRemaining) {
             timer.stop();
         }
         console.log('player_finished', { player: finishedPlayer });
         io.emit('player_finished', finishedPlayer);
-        const idx = players.findIndex((x) => x[0] === finishedPlayer[0]);
+        const idx = players.findIndex((x) => x.id === finishedPlayer.id);
+        // eslint-disable-next-line no-param-reassign
         players[idx] = finishedPlayer;
     }
 }
