@@ -9,7 +9,6 @@ const port = process.env.PORT || 3000;
 
 const timer = timerFn('myTimer');
 let playersRemaining = 0;
-let _players = [];
 
 io.on('connection', (socket) => {
     // console.log(socket.id);
@@ -26,8 +25,7 @@ io.on('connection', (socket) => {
 
     socket.on('simulate', (simReq) => {
         const { players, maxLength } = simReq;
-        _players = players;
-        simEvent(maxLength);
+        simEvent(players, maxLength);
     });
 });
 
@@ -37,15 +35,16 @@ app.get('/', (req, res) => {
 
 http.listen(port, () => {});
 
-function simEvent(maxLength) {
-    if (!_players.length) {
+function simEvent(players, maxLength) {
+    playersRemaining = 0;
+    if (!players.length) {
         return;
     }
-    playersRemaining = _players.length;
-
+    playersRemaining = players.length + 1;
+    timer.clear();
     timer.start();
     io.emit('begin');
-    _players.forEach((player) => {
+    players.forEach((player) => {
         setTimeout(() => {
             playerFinished(player);
         }, getRandomInt((maxLength * 500), maxLength * 1000));
@@ -61,8 +60,8 @@ function simEvent(maxLength) {
         }
         console.log('player_finished', { player: finishedPlayer });
         io.emit('player_finished', finishedPlayer);
-        const idx = _players.findIndex((x) => x[0] === finishedPlayer[0]);
-        _players[idx] = finishedPlayer;
+        const idx = players.findIndex((x) => x[0] === finishedPlayer[0]);
+        players[idx] = finishedPlayer;
     }
 }
 

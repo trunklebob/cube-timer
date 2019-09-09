@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
     <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <title>Battle Timer</title>
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,18 +27,19 @@
                 playerFinished(player);
             });
             var beginTime = 0;
-            var players = [
-                ['Player 1', 'player_1', '0:00.000', false],
-                ['Player 2', 'player_2', '0:00.000', false],
-                ['Player 3', 'player_3', '0:00.000', false],
-                ['Player 4', 'player_4', '0:00.000', false],
-                ['Player 5', 'player_5', '0:00.000', false]
-            ];
+            var players = [];
             var playersRemaining = players.length;
 
 
             document.getElementById('btnSimulate').addEventListener("click", () => {
-                socket.emit('simulate', {players: players, maxLength: 30}, (data) => {console.log(data)});
+                players = [
+                    ['Player 1', 'player_1', '0:00.000', false],
+                    ['Player 2', 'player_2', '0:00.000', false],
+                    ['Player 3', 'player_3', '0:00.000', false],
+                    ['Player 4', 'player_4', '0:00.000', false],
+                    ['Player 5', 'player_5', '0:00.000', false]
+                ]
+                socket.emit('simulate', {players: players, maxLength: 5}, (data) => {console.log(data)});
             });
 
             function startTimer() {
