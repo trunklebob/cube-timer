@@ -56,7 +56,7 @@ module.exports = () => {
         return template
             .replace('%mn', minutes())
             .replace('%s', seconds().toString().padStart(2, '0'))
-            .replace('%ms', milliseconds().toString().padStart(3, '0'));
+            .replace('%ms', milliseconds().toString().padStart(3, '0')).slice(0, -1);
     };
 
     return {

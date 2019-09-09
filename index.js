@@ -30,6 +30,8 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
+    res.type('html');
+    res.set({ 'content-type': "text/html; charset=utf-8" });
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
