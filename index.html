@@ -6,15 +6,16 @@
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { font: 13px Helvetica, Arial; }
+            .time { margin: 0px 0px 0px 10px;}
         </style>
     </head>
     <body>
         <button id="btnSimulate">Simulate</button>
-        <h2><span id="player_1">0:00.00</span></h2>
-        <h2><span id="player_2">0:00.00</span></h2>
-        <h2><span id="player_3">0:00.00</span></h2>
-        <h2><span id="player_4">0:00.00</span></h2>
-        <h2><span id="player_5">0:00.00</span></h2>
+        <h2><label for="player_1">Player 1</label><span class="time" id="player_1">0:00.00</span></h2>
+        <h2><label for="player_2">Player 2</label><span class="time" id="player_2">0:00.00</span></h2>
+        <h2><label for="player_3">Player 3</label><span class="time" id="player_3">0:00.00</span></h2>
+        <h2><label for="player_4">Player 4</label><span class="time" id="player_4">0:00.00</span></h2>
+        <h2><label for="player_5">Player 5</label><span class="time" id="player_5">0:00.00</span></h2>
         <script src="/socket.io/socket.io.js"></script>
         <script>
             var socket = io();
@@ -39,7 +40,7 @@
                     {name: 'Player 4', id: 'player_4', time: '0:00.000', finished: false},
                     {name: 'Player 5', id: 'player_5', time: '0:00.000', finished: false},
                 ];
-                socket.emit('simulate', {players: players, maxLength: 5}, (data) => {console.log(data)});
+                socket.emit('simulate', {players: players, maxLength: 30}, (data) => {console.log(data)});
             });
 
             function startTimer() {
@@ -48,7 +49,7 @@
                     const elapsed = new Date(Date.now()).getTime() - beginTime;
                     const formattedTime = formatTime(elapsed);
                     updateTimes(formattedTime);
-                }, 1)
+                }, 10)
             }
 
             function updateTimes(newTime) {

@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 
 const timer = timerFn('myTimer');
 let playersRemaining = 0;
+let timeouts = [];
 
 io.on('connection', (socket) => {
     // console.log(socket.id);
@@ -43,13 +44,22 @@ function simEvent(players, maxLength) {
         return;
     }
     playersRemaining = players.length + 1;
+    if (timer.isRunning) {
+        timer.stop();
+    }
+
+    if (timeouts.length > 0) {
+        timeouts.forEach((myTimer) => {
+            clearTimeout(myTimer);
+        });
+        timeouts = [];
+    }
     timer.clear();
     timer.start();
     io.emit('begin');
     players.forEach((player) => {
-        setTimeout(() => {
-            playerFinished(player);
-        }, getRandomInt((maxLength * 500), maxLength * 1000));
+        const timerId = setTimeout(() => { playerFinished(player); }, getRandomInt((maxLength * 500), maxLength * 1000));
+        timeouts.push(timerId);
     });
 
     function playerFinished(player) {
@@ -60,7 +70,7 @@ function simEvent(players, maxLength) {
         if (!playersRemaining) {
             timer.stop();
         }
-        console.log('player_finished', { player: finishedPlayer });
+        console.log('player_finished', JSON.stringify(finishedPlayer) );
         io.emit('player_finished', finishedPlayer);
         const idx = players.findIndex((x) => x.id === finishedPlayer.id);
         // eslint-disable-next-line no-param-reassign
