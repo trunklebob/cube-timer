@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font: 13px Helvetica, Arial; 
+    color: white;
+    background-color: black;
+}
+.time {
+    margin: 0px 0px 0px 10px;
+    font-family: 'Digital7';
+    font-size: 100px;
+    color: rgb(153, 26, 26);
+    font-weight: 400;
+}
+
+label {
+    display: block;
+    font-size: 40px;
+}
+
+@font-face {
+    font-family: Digital7;
+    src: url('./digital-7.mono.ttf') format('truetype');
+  }
+
+@font-face {
+    font-family: DSEG7;
+    src: url('./DSEG7Classic-Regular.woff') format('woff');
+}

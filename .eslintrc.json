@@ -20,6 +20,8 @@
         "no-plusplus": "off",
         "no-use-before-define": ["error", { "functions": false, "classes": true }],
         "no-console": "off", 
-        "no-underscore-dangle":"off"
+        "no-underscore-dangle":"off",
+        "max-len": ["error", {"code": 150}],
+        "import/newline-after-import": "off"
     }
 }

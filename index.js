@@ -1,8 +1,8 @@
 /* eslint-disable prefer-template */
-const app = require('express')();
+const express = require('express');
+const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
-const path = require('path');
 const timerFn = require('./timer');
 
 const port = process.env.PORT || 3000;
@@ -30,11 +30,7 @@ io.on('connection', (socket) => {
     });
 });
 
-app.get('/', (req, res) => {
-    res.type('html');
-    res.set({ 'content-type': "text/html; charset=utf-8" });
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+app.use(express.static('public'));
 
 http.listen(port, () => {});
 
@@ -70,7 +66,7 @@ function simEvent(players, maxLength) {
         if (!playersRemaining) {
             timer.stop();
         }
-        console.log('player_finished', JSON.stringify(finishedPlayer) );
+        console.log('player_finished', JSON.stringify(finishedPlayer));
         io.emit('player_finished', finishedPlayer);
         const idx = players.findIndex((x) => x.id === finishedPlayer.id);
         // eslint-disable-next-line no-param-reassign
