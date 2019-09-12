@@ -18,10 +18,12 @@
     "rules": {
         "indent": ["error", 4],
         "no-plusplus": "off",
-        "no-use-before-define": ["error", { "functions": false, "classes": true }],
+        "no-use-before-define": "off",
         "no-console": "off", 
         "no-underscore-dangle":"off",
-        "max-len": ["error", {"code": 150}],
-        "import/newline-after-import": "off"
+        "max-len": ["error", {"code": 220}],
+        "import/newline-after-import": "off",
+        "comma-dangle": "off",
+        "no-param-reassign": "off"
     }
 }
