@@ -3,83 +3,42 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <title>Battle Timer</title>
     </head>
     <body>
-        <button id="btnSimulate">Simulate</button>
-        <h2><label for="player_1">Player 1</label><span class="time" id="player_1">0:00.00</span></h2>
-        <h2><label for="player_2">Player 2</label><span class="time" id="player_2">0:00.00</span></h2>
-        <h2><label for="player_3">Player 3</label><span class="time" id="player_3">0:00.00</span></h2>
-        <h2><label for="player_4">Player 4</label><span class="time" id="player_4">0:00.00</span></h2>
-        <h2><label for="player_5">Player 5</label><span class="time" id="player_5">0:00.00</span></h2>
+
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div id="modal-boxes">
+
+                </div>
+               <button class="button" id='modal-save'>Update Names</button>
+            </div>
+                
+        </div>
+
+        <div class="numSelect">
+            <label for="num-players">Select number of players:</label>
+            <select id="num-players">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button class="button" id="btnNames">Edit Player Names</button>
+        </div>
+
+        <button class="button" id="btnSimulate">Simulate</button>
+        
+        <div id="timers">
+            <!-- filled by javascript -->
+        </div>
+ 
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var socket = io();
-            var timerFunc;
-            socket.on('begin', (data) => {
-                startTimer();
-            });
-    
-            socket.on('player_finished', (player) => {
-                playerFinished(player);
-            });
-            var beginTime = 0;
-            var players = [];
-            var playersRemaining = players.length;
-
-
-            document.getElementById('btnSimulate').addEventListener("click", () => {
-                players = [
-                    {name: 'Player 1', id: 'player_1', time: '0:00.000', finished: false},
-                    {name: 'Player 2', id: 'player_2', time: '0:00.000', finished: false},
-                    {name: 'Player 3', id: 'player_3', time: '0:00.000', finished: false},
-                    {name: 'Player 4', id: 'player_4', time: '0:00.000', finished: false},
-                    {name: 'Player 5', id: 'player_5', time: '0:00.000', finished: false},
-                ];
-                socket.emit('simulate', {players: players, maxLength: 30}, (data) => {console.log(data)});
-            });
-
-            function startTimer() {
-                beginTime = new Date(Date.now()).getTime();
-                timerFunc = setInterval(() => {
-                    const elapsed = new Date(Date.now()).getTime() - beginTime;
-                    const formattedTime = formatTime(elapsed);
-                    updateTimes(formattedTime);
-                }, 10)
-            }
-
-            function updateTimes(newTime) {
-                players.forEach((player) => {
-                    if (!player.finished) {
-                        player.time = newTime;
-                    }
-                    drawTime(player);
-                });
-            }
-
-            function drawTime(player) {
-                document.getElementById(player.id).innerHTML = player.time;
-            }
-
-            function formatTime(milli) {
-                const minutes = Math.floor(milli / 1000 / 60).toString();
-                const seconds = (Math.floor(milli / 1000) % 60).toString().padStart(2, '0');
-                const ms = (milli % 1000).toString().padStart(3, '0');
-                const time = minutes + ':' + seconds + '.' + ms;
-                return time.slice(0, -1);
-                    
-            }
-
-            function playerFinished(player) {
-                const idx = players.findIndex((x) => {
-                    return x.id === player.id;
-                });
-                players[idx] = player;
-                playersRemaining--;
-                if (!playersRemaining) {
-                    clearInterval(timerFunc);
-                }
-            }
-        </script>
+        <script src="app.js"></script>
     </body>
 </html>
