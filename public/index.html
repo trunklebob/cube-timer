@@ -9,33 +9,36 @@
     <body>
 
         <div id="myModal" class="modal">
-
             <!-- Modal content -->
             <div class="modal-content">
                 <div id="modal-boxes">
-
                 </div>
                <button class="button" id='modal-save'>Update Names</button>
             </div>
-                
         </div>
 
-        <div class="numSelect">
-            <label for="num-players">Select number of players:</label>
-            <select id="num-players">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-            <button class="button" id="btnNames">Edit Player Names</button>
-        </div>
+        <div class="container">
+            <div class="numSelect">
+                <label for="num-players">Select number of players:&nbsp;</label>
+                <select id="num-players">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>&nbsp;
+                <button class="button" id="btnNames">Edit Player Names</button>&nbsp;
+                <button class="button" id="btnSimulate">Simulate</button>
+            </div>
 
-        <button class="button" id="btnSimulate">Simulate</button>
-        
-        <div id="timers">
-            <!-- filled by javascript -->
+            <div class="grid">
+                <div id="timers">
+                    <!-- filled by javascript -->
+                </div>
+                <div id="results">
+                    <!-- filled by javascript -->
+                </div>
+            </div>
         </div>
  
         <script src="/socket.io/socket.io.js"></script>

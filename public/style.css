@@ -8,9 +8,7 @@ body {
 	color: white;
 	background-color: black;
 }
-#num-players {
-	display: inline;
-}
+
 .time {
 	margin: 0px 0px 0px 10px;
 	font-family: 'Digital7';
@@ -34,6 +32,23 @@ body {
 	src: url('./DSEG7Classic-Regular.woff') format('woff');
 }
 
+.container {
+	width: 80%;
+	margin: 5rem auto;
+}
+#num-players {
+	display: inline;
+}
+.grid {
+	display: flex;
+	align-items: center;
+	margin-top: 5rem;
+	justify-content: space-between;
+}
+.grid > div {
+	flex: 1;
+}
+
 .modal {
 	display: none; /* Hidden by default */
 	position: fixed; /* Stay in place */
@@ -45,8 +60,6 @@ body {
 	overflow: auto; /* Enable scroll if needed */
 	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
-
-/* Modal Content/Box */
 .modal-content {
 	background-color: rgb(153, 26, 26);
 	border-radius: 5px;
@@ -96,3 +109,52 @@ body {
 	transform: scale(1.05);
 	box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
 }
+
+.h2-1 > span {
+	font-size: 7.5625rem;
+}
+.h2-2 > span {
+	font-size: 6.875rem;
+}
+.h2-3 > span {
+	font-size: 6.25rem;
+}
+.h2-4 > span {
+	font-size: 5.682rem;
+}
+.h2-5 > span {
+	font-size: 5.165rem;
+}
+.h2-1 > label {
+	font-size: 3.025rem;
+}
+.h2-2 > label {
+	font-size: 2.75rem;
+}
+.h2-3 > label {
+	font-size: 2.5rem;
+}
+.h2-4 > label {
+	font-size: 2.273rem;
+}
+.h2-5 > label {
+	font-size: 2.066rem;
+}
+/* .h2-1 {
+	transform: scale(1.21);
+	margin-bottom: 1.5rem;
+}
+.h2-2 {
+	transform: scale(1.1);
+	margin-bottom: .5rem;
+}
+.h2-3 {
+	transform: scale(1);
+}
+.h2-4 {
+	transform: scale(.9);
+}
+.h2-5 {
+	margin-top: -.5rem;
+	transform: scale(.81);
+} */

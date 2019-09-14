@@ -15,6 +15,9 @@ socket.on('finished', (players) => {
 });
 let beginTime = 0;
 let players = [];
+let results = [];
+let history = [];
+let resultsHTML = '';
 let numPlayers = 1;
 let playersRemaining = players.length;
 const timers = document.getElementById('timers');
@@ -113,6 +116,7 @@ function formatTime(milli) {
 function playerFinished(player) {
 	const idx = players.findIndex((x) => x.id === player.id);
 	players[idx] = player;
+	results.push(idx);
 	playersRemaining--;
 	if (!playersRemaining) {
 		clearInterval(timerFunc);
@@ -123,8 +127,18 @@ function gameOver(donePlayers) {
 	donePlayers.forEach((player) => {
 		drawTime(player);
 	});
+	results.forEach((idx) => {
+		showResults(players[idx], results.indexOf(idx) + 1);
+	});
+
 	document.getElementById('num-players').disabled = false;
+	document.getElementById('results').innerHTML = resultsHTML;
 }
+
+function showResults(player, rank) {
+	resultsHTML += `<h2 class="h2-${rank}"><label class="player-label" for="rank-${rank}">${player.name}</label><span class="time" id="rank-${rank}">${player.time}</span></h2>`;
+}
+
 // Edit names Modal
 const modal = document.getElementById('myModal');
 const btn = document.getElementById('btnNames');
