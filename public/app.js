@@ -1,11 +1,17 @@
-var socket = io();
-var timerFunc;
-socket.on('begin', (data) => {
+// eslint-disable-next-line no-undef
+const socket = io();
+let timerFunc;
+socket.on('begin', () => {
 	startTimer();
 });
 
 socket.on('player_finished', (player) => {
 	playerFinished(player);
+});
+
+socket.on('finished', (players) => {
+	console.log(players);
+	gameOver(players);
 });
 let beginTime = 0;
 let players = [];
@@ -27,9 +33,7 @@ document.getElementById('num-players').addEventListener('change', () => {
 
 document.getElementById('btnSimulate').addEventListener('click', () => {
 	document.getElementById('num-players').disabled = true;
-	socket.emit('simulate', { players: players, maxLength: 30 }, (data) => {
-		console.log(data);
-	});
+	socket.emit('simulate', { players, maxLength: 5 });
 });
 
 function createPlayers(num) {
@@ -67,9 +71,8 @@ function createTimers() {
 function saveNames() {
 	let index = 0;
 	players.forEach((player) => {
-		let name = document.getElementById(`edit-${index + 1}`).value;
-
-		if (name != '') {
+		const name = document.getElementById(`edit-${index + 1}`).value;
+		if (name !== '') {
 			player.name = name;
 			document.getElementById(`label-${index + 1}`).innerText = name;
 		}
@@ -103,14 +106,12 @@ function formatTime(milli) {
 	const minutes = Math.floor(milli / 1000 / 60).toString();
 	const seconds = (Math.floor(milli / 1000) % 60).toString().padStart(2, '0');
 	const ms = (milli % 1000).toString().padStart(3, '0');
-	const time = minutes + ':' + seconds + '.' + ms;
+	const time = `${minutes}:${seconds}.${ms}`;
 	return time.slice(0, -1);
 }
 
 function playerFinished(player) {
-	const idx = players.findIndex((x) => {
-		return x.id === player.id;
-	});
+	const idx = players.findIndex((x) => x.id === player.id);
 	players[idx] = player;
 	playersRemaining--;
 	if (!playersRemaining) {
@@ -118,15 +119,21 @@ function playerFinished(player) {
 	}
 }
 
+function gameOver(donePlayers) {
+	donePlayers.forEach((player) => {
+		drawTime(player);
+	});
+	document.getElementById('num-players').disabled = false;
+}
 // Edit names Modal
-var modal = document.getElementById('myModal');
-var btn = document.getElementById('btnNames');
-var span = document.getElementsByClassName('close')[0];
-btn.onclick = function() {
+const modal = document.getElementById('myModal');
+const btn = document.getElementById('btnNames');
+const span = document.getElementsByClassName('close')[0];
+btn.onclick = function showModal() {
 	modal.style.display = 'block';
 };
-window.onclick = function(event) {
-	if (event.target == modal) {
+window.onclick = function hideModal(event) {
+	if (event.target === modal) {
 		modal.style.display = 'none';
 	}
 };

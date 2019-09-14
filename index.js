@@ -12,8 +12,6 @@ let playersRemaining = 0;
 let timeouts = [];
 
 io.on('connection', (socket) => {
-    // console.log(socket.id);
-
     socket.on('timer_reset', () => {
         timer.clear();
     });
@@ -39,7 +37,7 @@ function simEvent(players, maxLength) {
     if (!players.length) {
         return;
     }
-    playersRemaining = players.length + 1;
+    playersRemaining = players.length;
     if (timer.isRunning) {
         timer.stop();
     }
@@ -63,17 +61,21 @@ function simEvent(players, maxLength) {
         finishedPlayer.time = timer.currTime();
         finishedPlayer.finished = true;
         playersRemaining--;
-        if (!playersRemaining) {
-            timer.stop();
-        }
-        console.log('player_finished', JSON.stringify(finishedPlayer));
         io.emit('player_finished', finishedPlayer);
         const idx = players.findIndex((x) => x.id === finishedPlayer.id);
         // eslint-disable-next-line no-param-reassign
         players[idx] = finishedPlayer;
+        if (!playersRemaining) {
+            timer.stop();
+            allDone(players);
+        }
     }
 }
 
 function getRandomInt(min, max) {
     return Math.random() * (max - min) + min;
+}
+
+function allDone(players) {
+    io.emit('finished', players);
 }
