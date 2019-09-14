@@ -31,11 +31,13 @@ document.getElementById('modal-save').addEventListener('click', () => {
 
 document.getElementById('num-players').addEventListener('change', () => {
 	numPlayers = document.getElementById('num-players').value;
+	document.getElementById('results').innerHTML = resultsHTML = '';
 	createPlayers(numPlayers);
 });
 
 document.getElementById('btnSimulate').addEventListener('click', () => {
 	document.getElementById('num-players').disabled = true;
+	document.getElementById('results').innerHTML = resultsHTML = '';
 	socket.emit('simulate', { players, maxLength: 5 });
 });
 
