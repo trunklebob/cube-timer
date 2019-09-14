@@ -13,11 +13,16 @@ let numPlayers = 1;
 let playersRemaining = players.length;
 const timers = document.getElementById('timers');
 
-createTimers(numPlayers);
+createPlayers(numPlayers);
+
+document.getElementById('modal-save').addEventListener('click', () => {
+	saveNames();
+	modal.style.display = 'none';
+});
 
 document.getElementById('num-players').addEventListener('change', () => {
 	numPlayers = document.getElementById('num-players').value;
-	createTimers(numPlayers);
+	createPlayers(numPlayers);
 });
 
 document.getElementById('btnSimulate').addEventListener('click', () => {
@@ -27,31 +32,43 @@ document.getElementById('btnSimulate').addEventListener('click', () => {
 	});
 });
 
-function createTimers(num) {
+function createPlayers(num) {
+	if (num <= players.length) {
+		players = players.slice(0, num);
+	} else {
+		for (let index = players.length; index < num; index++) {
+			let player = {
+				name: 'Player ' + (index + 1),
+				id: `player_${index + 1}`,
+				time: '0:00.000',
+				finished: false
+			};
+			players.push(player);
+		}
+	}
+	playersRemaining = players.length;
+	createTimers();
+}
+
+function createTimers() {
 	let timerHTML = '';
 	let modalInputs = '';
-	players = [];
-	for (let index = 1; index <= num; index++) {
-		let player = { name: 'Player ' + index, id: `player_${index}`, time: '0:00.000', finished: false };
-		players.push(player);
-		timerHTML += `<h2><label class="player-label" id="label-${index}" for="player_${index}">Player ${index}</label><span class="time" id="player_${index}">0:00.00</span></h2>`;
+	players.forEach((player) => {
+		index = players.indexOf(player) + 1;
+		timerHTML += `<h2><label class="player-label" id="label-${index}" for="player_${index}">${player.name}</label><span class="time" id="player_${index}">0:00.00</span></h2>`;
 
-		modalInputs += `<div class="modal-players"><label class="modal-label" for="edit-${index}">Player ${index}:&nbsp;</label><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}"></div>`;
-	}
-	console.log(players);
-	playersRemaining = players.length;
+		modalInputs += `<div class="modal-players"><label class="modal-label" for="edit-${index +
+			1}">Player ${index}:&nbsp;</label><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}" value="${player.name}"></div>`;
+	});
 	timers.innerHTML = timerHTML;
 	document.getElementById('modal-boxes').innerHTML = modalInputs;
-	document.getElementById('modal-save').addEventListener('click', () => {
-		saveNames();
-		modal.style.display = 'none';
-	});
 }
 
 function saveNames() {
 	let index = 0;
 	players.forEach((player) => {
 		let name = document.getElementById(`edit-${index + 1}`).value;
+
 		if (name != '') {
 			player.name = name;
 			document.getElementById(`label-${index + 1}`).innerText = name;
