@@ -8,27 +8,32 @@
     </head>
     <body>
 
-        <div id="myModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div id="modal-boxes">
-                </div>
-               <button class="button" id='modal-save'>Update Names</button>
-            </div>
-        </div>
-
         <div class="container">
             <div class="numSelect">
-                <label class="select-label" for="num-players">Select number of players:&nbsp;</label>
+                <div><button class="button" id="btnSimulate">Simulate</button></div>
+                <br>
+                <label class="select-label" for="num-players">number of players:</label><br>
                 <select class="select" id="num-players">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
-                </select>&nbsp;
-                <button class="button" id="btnNames">Edit Player Names</button>&nbsp;
-                <button class="button" id="btnSimulate">Simulate</button>
+                </select>
+                <br>
+                <br>
+                <div><button class="button" id="btnNames">Edit Names</button></div>
+                <br>
+                
+
+                <div id="myModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <div id="modal-boxes">
+                        </div>
+                    <button class="button" id='modal-save'>Save Names</button>
+                    </div>
+                </div>
             </div>
 
             <div class="grid">

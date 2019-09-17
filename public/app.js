@@ -29,7 +29,7 @@ document.getElementById('modal-save').addEventListener('click', () => {
 	modal.style.display = 'none';
 });
 
-document.getElementById('num-players').addEventListener('change', () => {
+document.getElementById('num-players').addEventListener('click', () => {
 	numPlayers = document.getElementById('num-players').value;
 	document.getElementById('results-display').innerHTML = resultsHTML = '';
 	createPlayers(numPlayers);
@@ -67,7 +67,7 @@ function createTimers() {
 		timerHTML += `<h2 class="player-h2"><label class="player-label" id="label-${index}" for="player_${index}">&nbsp;${player.name}&nbsp;</label><div class="time" id="${player.id}">0:00.00</div></h2>`;
 
 		modalInputs += `<div class="modal-players"><label class="modal-label" for="edit-${index +
-			1}">Player ${index}:&nbsp;</label><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}" value="${player.name}"></div>`;
+			1}">Player ${index}:</label><br><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}" value="${player.name}"></div><br>`;
 	});
 	timers.innerHTML = timerHTML;
 	document.getElementById('modal-boxes').innerHTML = modalInputs;
@@ -79,7 +79,7 @@ function saveNames() {
 		const name = document.getElementById(`edit-${index + 1}`).value;
 		if (name !== '') {
 			player.name = name;
-			document.getElementById(`label-${index + 1}`).innerText = ' ' + name + ' ';
+			document.getElementById(`label-${index + 1}`).innerHTML = `&nbsp;${name}&nbsp;`;
 		}
 		index++;
 	});
