@@ -79,7 +79,7 @@ function saveNames() {
 		const name = document.getElementById(`edit-${index + 1}`).value;
 		if (name !== '') {
 			player.name = name;
-			document.getElementById(`label-${index + 1}`).innerText = name;
+			document.getElementById(`label-${index + 1}`).innerText = ' ' + name + ' ';
 		}
 		index++;
 	});
@@ -130,17 +130,21 @@ function gameOver(donePlayers) {
 	donePlayers.forEach((player) => {
 		drawTime(player);
 	});
-	// results.forEach((idx) => {
-	// 	showResults(players[idx], results.indexOf(idx) + 1);
-	// });
-
+	let rankingsContainer = document.querySelectorAll('.rankings-container');
+	let rankings = document.querySelectorAll('.rankings');
+	setTimeout(() => {
+		for (let index = 0; index < rankings.length; index++) {
+			rankings[index].style.display = 'block';
+			rankingsContainer[index].style.paddingLeft = '0';
+		}
+	}, 500);
 	document.getElementById('num-players').disabled = false;
 }
 
 function showResults(player, rank) {
 	const placing = [ '1st', '2nd', '3rd', '4th', '5th' ];
 	resultsHTML += `<div class="rankings-container">
-						<div class="rankings">
+						<div class="rankings rankings-${rank}">
 							<p>${placing[rank - 1]}</p>
 						</div>
 						<div class="rankings-players">

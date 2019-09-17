@@ -119,9 +119,9 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding-left: 2rem;
 }
 .rankings {
-	/* display: none; */
 	margin-top: 2rem;
 	display: inline-block;
 	height: auto;
@@ -135,6 +135,7 @@ body {
 	color: transparent;
 	letter-spacing: -.5rem;
 	transform: skewY(-20deg);
+	display: none;
 }
 .rankings-container:first-child > .rankings {
 	font-size: 5rem;
