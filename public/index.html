@@ -12,26 +12,36 @@
             <div class="numSelect">
                 <div><button class="button" id="btnSimulate">Simulate</button></div>
                 <br>
-                <label class="select-label" for="num-players">number of players:</label><br>
+                <span class="select-div"><label class="select-label" for="num-players">players:&nbsp;</label>
                 <select class="select" id="num-players">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                    <option value="1">&nbsp;1</option>
+                    <option value="2">&nbsp;2</option>
+                    <option value="3">&nbsp;3</option>
+                    <option value="4">&nbsp;4</option>
+                    <option value="5">&nbsp;5</option>
+                </select></span>
                 <br>
                 <br>
-                <div><button class="button" id="btnNames">Edit Names</button></div>
+                <div><button class="button" id="btnNames">Edit Names</button></div><br>
+                <div><button class="button" id="btnPenalties">Penalties?</button></div>
                 <br>
                 
 
-                <div id="myModal" class="modal">
-                    <!-- Modal content -->
+                <div id="nameModal" class="modal">
                     <div class="modal-content">
-                        <div id="modal-boxes">
+                        <div id="name-modal-boxes">
+                            <!-- Modal content -->                            
                         </div>
-                    <button class="button" id='modal-save'>Save Names</button>
+                    <button class="button" id='name-modal-save'>Save Names</button>
+                    </div>
+                </div>
+
+                <div id="penaltyModal" class="modal">
+                    <div class="modal-content">
+                        <div id="penalty-modal-boxes">
+                            <!-- Modal content --> 
+                        </div>
+                    <button class="button" id='penalty-modal-save'>Assess</button>
                     </div>
                 </div>
             </div>

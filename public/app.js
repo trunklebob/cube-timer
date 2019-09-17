@@ -15,6 +15,7 @@ socket.on('finished', (players) => {
 });
 let beginTime = 0;
 let players = [];
+let sortedPlayers = [];
 let results = [];
 let history = [];
 let resultsHTML = '';
@@ -24,9 +25,13 @@ const timers = document.getElementById('timers-display');
 
 createPlayers(numPlayers);
 
-document.getElementById('modal-save').addEventListener('click', () => {
+document.getElementById('name-modal-save').addEventListener('click', () => {
 	saveNames();
-	modal.style.display = 'none';
+	nameModal.style.display = 'none';
+});
+document.getElementById('penalty-modal-save').addEventListener('click', () => {
+	penaltyModal.style.display = 'none';
+	assessPenalty();
 });
 
 document.getElementById('num-players').addEventListener('click', () => {
@@ -38,6 +43,13 @@ document.getElementById('num-players').addEventListener('click', () => {
 document.getElementById('btnSimulate').addEventListener('click', () => {
 	document.getElementById('num-players').disabled = true;
 	document.getElementById('results-display').innerHTML = resultsHTML = '';
+
+	results = [];
+	players.forEach((player) => {
+		player.time = '0:00.00';
+		player.finished = false;
+		drawTime(player);
+	});
 	socket.emit('simulate', { players, maxLength: 5 });
 });
 
@@ -62,15 +74,19 @@ function createPlayers(num) {
 function createTimers() {
 	let timerHTML = '';
 	let modalInputs = '';
+	let modalPenalty = '';
+
 	players.forEach((player) => {
 		index = players.indexOf(player) + 1;
 		timerHTML += `<h2 class="player-h2"><label class="player-label" id="label-${index}" for="player_${index}">&nbsp;${player.name}&nbsp;</label><div class="time" id="${player.id}">0:00.00</div></h2>`;
 
-		modalInputs += `<div class="modal-players"><label class="modal-label" for="edit-${index +
-			1}">Player ${index}:</label><br><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}" value="${player.name}"></div><br>`;
+		modalInputs += `<div class="modal-players"><label class="modal-label" for="edit-${index}">Player ${index}:</label><br><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}" value="${player.name}"></div><br>`;
+
+		modalPenalty += `<p class="modal-label"><span id="penalty-label-${index}">Player ${index}:&nbsp;</span><input type="number" class="penalty" id="penalty-${index}" value='0'></p>`;
 	});
 	timers.innerHTML = timerHTML;
-	document.getElementById('modal-boxes').innerHTML = modalInputs;
+	document.getElementById('name-modal-boxes').innerHTML = modalInputs;
+	document.getElementById('penalty-modal-boxes').innerHTML = modalPenalty;
 }
 
 function saveNames() {
@@ -80,6 +96,7 @@ function saveNames() {
 		if (name !== '') {
 			player.name = name;
 			document.getElementById(`label-${index + 1}`).innerHTML = `&nbsp;${name}&nbsp;`;
+			document.getElementById(`penalty-label-${index + 1}`).innerHTML = `${name}:&nbsp;`;
 		}
 		index++;
 	});
@@ -130,15 +147,9 @@ function gameOver(donePlayers) {
 	donePlayers.forEach((player) => {
 		drawTime(player);
 	});
-	let rankingsContainer = document.querySelectorAll('.rankings-container');
-	let rankings = document.querySelectorAll('.rankings');
-	setTimeout(() => {
-		for (let index = 0; index < rankings.length; index++) {
-			rankings[index].style.display = 'block';
-			rankingsContainer[index].style.paddingLeft = '0';
-		}
-	}, 500);
+	setTimeout(showRankings(), 750);
 	document.getElementById('num-players').disabled = false;
+	document.getElementById('btnPenalties').style.display = 'block';
 }
 
 function showResults(player, rank) {
@@ -156,15 +167,76 @@ function showResults(player, rank) {
 	document.getElementById('results-display').innerHTML = resultsHTML;
 }
 
-// Edit names Modal
-const modal = document.getElementById('myModal');
-const btn = document.getElementById('btnNames');
-const span = document.getElementsByClassName('close')[0];
-btn.onclick = function showModal() {
-	modal.style.display = 'block';
-};
-window.onclick = function hideModal(event) {
-	if (event.target === modal) {
-		modal.style.display = 'none';
+function showRankings() {
+	let rankingsContainer = document.querySelectorAll('.rankings-container');
+	let rankings = document.querySelectorAll('.rankings');
+	for (let index = 0; index < rankings.length; index++) {
+		rankings[index].style.display = 'block';
+		rankingsContainer[index].style.paddingLeft = '0';
 	}
+}
+
+function assessPenalty() {
+	players.forEach((player) => {
+		var penalty = document.getElementById(`penalty-${players.indexOf(player) + 1}`).value;
+		console.log(penalty);
+		var adjTime = addPenalties(player.time, penalty);
+		player.ogTime = player.time;
+		player.time = adjTime;
+	});
+	sortedPlayers = [ ...players ];
+	sortTimes(sortedPlayers);
+	resultsHTML = '';
+	sortedPlayers.forEach((player) => {
+		showResults(player, sortedPlayers.indexOf(player) + 1);
+	});
+	showRankings();
+}
+
+function sortTimes(players) {
+	players.sort((a, b) => {
+		let timeA = a.time;
+		let timeB = b.time;
+
+		if (timeA.length < timeB.length) {
+			return -1;
+		} else if (timeA.length > timeB.length) {
+			return 1;
+		} else {
+			return timeA < timeB ? -1 : timeA > timeB ? 1 : 0;
+		}
+	});
+}
+
+function addPenalties(time, penalties) {
+	let x = time.split(':');
+	let y = x[1].split('.');
+	let min = parseInt(x[0]);
+	let sec = parseInt(y[0]);
+	let milli = parseInt(y[1]);
+	sec += penalties * 2;
+
+	if (sec < 10) {
+		sec = '0' + sec;
+	} else if (sec > 60) {
+		min++;
+		sec = sec - 60;
+	}
+
+	var newTime = min + ':' + sec + '.' + milli;
+
+	return newTime;
+}
+
+// Edit names Modal
+const nameModal = document.getElementById('nameModal');
+const penaltyModal = document.getElementById('penaltyModal');
+const btnNames = document.getElementById('btnNames');
+const btnPenalties = document.getElementById('btnPenalties');
+const span = document.getElementsByClassName('close')[0];
+btnNames.onclick = function showModal() {
+	nameModal.style.display = 'block';
+};
+btnPenalties.onclick = function showModal() {
+	penaltyModal.style.display = 'block';
 };
