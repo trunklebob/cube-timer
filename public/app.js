@@ -20,7 +20,7 @@ let history = [];
 let resultsHTML = '';
 let numPlayers = 1;
 let playersRemaining = players.length;
-const timers = document.getElementById('timers');
+const timers = document.getElementById('timers-display');
 
 createPlayers(numPlayers);
 
@@ -31,13 +31,13 @@ document.getElementById('modal-save').addEventListener('click', () => {
 
 document.getElementById('num-players').addEventListener('change', () => {
 	numPlayers = document.getElementById('num-players').value;
-	document.getElementById('results').innerHTML = resultsHTML = '';
+	document.getElementById('results-display').innerHTML = resultsHTML = '';
 	createPlayers(numPlayers);
 });
 
 document.getElementById('btnSimulate').addEventListener('click', () => {
 	document.getElementById('num-players').disabled = true;
-	document.getElementById('results').innerHTML = resultsHTML = '';
+	document.getElementById('results-display').innerHTML = resultsHTML = '';
 	socket.emit('simulate', { players, maxLength: 5 });
 });
 
@@ -64,7 +64,7 @@ function createTimers() {
 	let modalInputs = '';
 	players.forEach((player) => {
 		index = players.indexOf(player) + 1;
-		timerHTML += `<h2><label class="player-label" id="label-${index}" for="player_${index}">${player.name}</label><span class="time" id="player_${index}">0:00.00</span></h2>`;
+		timerHTML += `<h2 class="player-h2"><label class="player-label" id="label-${index}" for="player_${index}">&nbsp;${player.name}&nbsp;</label><div class="time" id="${player.id}">0:00.00</div></h2>`;
 
 		modalInputs += `<div class="modal-players"><label class="modal-label" for="edit-${index +
 			1}">Player ${index}:&nbsp;</label><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}" value="${player.name}"></div>`;
@@ -119,6 +119,7 @@ function playerFinished(player) {
 	const idx = players.findIndex((x) => x.id === player.id);
 	players[idx] = player;
 	results.push(idx);
+	showResults(players[idx], results.length);
 	playersRemaining--;
 	if (!playersRemaining) {
 		clearInterval(timerFunc);
@@ -129,16 +130,26 @@ function gameOver(donePlayers) {
 	donePlayers.forEach((player) => {
 		drawTime(player);
 	});
-	results.forEach((idx) => {
-		showResults(players[idx], results.indexOf(idx) + 1);
-	});
+	// results.forEach((idx) => {
+	// 	showResults(players[idx], results.indexOf(idx) + 1);
+	// });
 
 	document.getElementById('num-players').disabled = false;
-	document.getElementById('results').innerHTML = resultsHTML;
 }
 
 function showResults(player, rank) {
-	resultsHTML += `<h2 class="h2-${rank}"><label class="player-label" for="rank-${rank}">${player.name}</label><span class="time" id="rank-${rank}">${player.time}</span></h2>`;
+	const placing = [ '1st', '2nd', '3rd', '4th', '5th' ];
+	resultsHTML += `<div class="rankings-container">
+						<div class="rankings">
+							<p>${placing[rank - 1]}</p>
+						</div>
+						<div class="rankings-players">
+							<h2 class="player-results"><label class="player-label" id="label-${rank}" for="player_${rank}">&nbsp;${player.name}&nbsp;</label><div class="time" id="${player.id}">${player.time}</div>
+							</h2>
+						</div>
+					</div>`;
+
+	document.getElementById('results-display').innerHTML = resultsHTML;
 }
 
 // Edit names Modal

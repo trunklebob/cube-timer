@@ -19,8 +19,8 @@
 
         <div class="container">
             <div class="numSelect">
-                <label for="num-players">Select number of players:&nbsp;</label>
-                <select id="num-players">
+                <label class="select-label" for="num-players">Select number of players:&nbsp;</label>
+                <select class="select" id="num-players">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -33,10 +33,16 @@
 
             <div class="grid">
                 <div id="timers">
-                    <!-- filled by javascript -->
+                    <h2 id="timer-head">Players</h2>
+                    <div id="timers-display">
+                        <!-- filled by javascript -->
+                    </div>
                 </div>
                 <div id="results">
-                    <!-- filled by javascript -->
+                    <h2 id="results-head">Results</h2>
+                    <div id="results-display">
+                        <!-- filled by javascript -->
+                    </div>
                 </div>
             </div>
         </div>
