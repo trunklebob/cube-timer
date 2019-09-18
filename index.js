@@ -4,6 +4,7 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const timerFn = require('./timer');
+const gpio = require('onoff').Gpio;
 
 const port = process.env.PORT || 3000;
 
