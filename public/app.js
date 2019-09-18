@@ -16,8 +16,6 @@ socket.on('finished', (players) => {
 let beginTime = 0;
 let players = [];
 let sortedPlayers = [];
-let results = [];
-let history = [];
 let resultsHTML = '';
 let numPlayers = 1;
 let playersRemaining = players.length;
@@ -44,7 +42,7 @@ document.getElementById('btnSimulate').addEventListener('click', () => {
 	document.getElementById('num-players').disabled = true;
 	document.getElementById('results-display').innerHTML = resultsHTML = '';
 
-	results = [];
+	sortedPlayers = [];
 	players.forEach((player) => {
 		player.time = '0:00.00';
 		player.finished = false;
@@ -82,7 +80,7 @@ function createTimers() {
 
 		modalInputs += `<div class="modal-players"><label class="modal-label" for="edit-${index}">Player ${index}:</label><br><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}" value="${player.name}"></div><br>`;
 
-		modalPenalty += `<p class="modal-label"><span id="penalty-label-${index}">Player ${index}:&nbsp;</span><input type="number" class="penalty" id="penalty-${index}" value='0'></p>`;
+		modalPenalty += `<p class="modal-label"><span id="penalty-label-${index}">Player ${index}:&nbsp;</span><input type="number" min='0' max='5' class="penalty" id="penalty-${index}" value='0'></p>`;
 	});
 	timers.innerHTML = timerHTML;
 	document.getElementById('name-modal-boxes').innerHTML = modalInputs;
@@ -135,8 +133,9 @@ function formatTime(milli) {
 function playerFinished(player) {
 	const idx = players.findIndex((x) => x.id === player.id);
 	players[idx] = player;
-	results.push(idx);
-	showResults(players[idx], results.length);
+	player.ogTime = player.time;
+	sortedPlayers.push(player);
+	showResults(player, sortedPlayers.length);
 	playersRemaining--;
 	if (!playersRemaining) {
 		clearInterval(timerFunc);
@@ -165,6 +164,7 @@ function showResults(player, rank) {
 					</div>`;
 
 	document.getElementById('results-display').innerHTML = resultsHTML;
+	console.log(player);
 }
 
 function showRankings() {
@@ -177,14 +177,11 @@ function showRankings() {
 }
 
 function assessPenalty() {
-	players.forEach((player) => {
+	sortedPlayers.forEach((player) => {
 		var penalty = document.getElementById(`penalty-${players.indexOf(player) + 1}`).value;
-		console.log(penalty);
-		var adjTime = addPenalties(player.time, penalty);
-		player.ogTime = player.time;
+		var adjTime = addPenalties(player.ogTime, penalty);
 		player.time = adjTime;
 	});
-	sortedPlayers = [ ...players ];
 	sortTimes(sortedPlayers);
 	resultsHTML = '';
 	sortedPlayers.forEach((player) => {
@@ -215,7 +212,9 @@ function addPenalties(time, penalties) {
 	let sec = parseInt(y[0]);
 	let milli = parseInt(y[1]);
 	sec += penalties * 2;
-
+	if (milli < 10) {
+		milli = '0' + milli;
+	}
 	if (sec < 10) {
 		sec = '0' + sec;
 	} else if (sec > 60) {
