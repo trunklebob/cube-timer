@@ -139,6 +139,9 @@ body {
 	transform: skewY(-20deg);
 	display: none;
 }
+.rankings-container:last-child {
+	margin-bottom: 2rem;
+}
 .rankings-container:first-child > .rankings {
 	background-image: linear-gradient(to right, #ffcf40, #ffbf00, #bf9b30, #a67c00, #bf9b30, #ffbf00, #ffcf40);
 	letter-spacing: -.5rem;

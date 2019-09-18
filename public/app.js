@@ -13,9 +13,11 @@ socket.on('finished', (players) => {
 	console.log(players);
 	gameOver(players);
 });
+let timerHTML = '';
 let beginTime = 0;
 let players = [];
 let sortedPlayers = [];
+let timerArray = [];
 let resultsHTML = '';
 let numPlayers = 1;
 let playersRemaining = players.length;
@@ -41,6 +43,7 @@ document.getElementById('num-players').addEventListener('click', () => {
 document.getElementById('btnSimulate').addEventListener('click', () => {
 	document.getElementById('num-players').disabled = true;
 	document.getElementById('results-display').innerHTML = resultsHTML = '';
+	createPlayers(numPlayers);
 
 	sortedPlayers = [];
 	players.forEach((player) => {
@@ -70,13 +73,18 @@ function createPlayers(num) {
 }
 
 function createTimers() {
-	let timerHTML = '';
+	timerHTML = '';
 	let modalInputs = '';
 	let modalPenalty = '';
-
+	timerArray = [];
 	players.forEach((player) => {
 		index = players.indexOf(player) + 1;
-		timerHTML += `<h2 class="player-h2"><label class="player-label" id="label-${index}" for="player_${index}">&nbsp;${player.name}&nbsp;</label><div class="time" id="${player.id}">0:00.00</div></h2>`;
+
+		const indivTimer = `<h2 class="player-h2"><label class="player-label" id="label-${index}" for="player_${index}">&nbsp;${player.name}&nbsp;</label><div class="time" id="${player.id}">0:00.00</div></h2>`;
+
+		timerHTML += indivTimer;
+
+		timerArray.push(indivTimer);
 
 		modalInputs += `<div class="modal-players"><label class="modal-label" for="edit-${index}">Player ${index}:</label><br><input type="text" name="edit-${index}" class="modal-textbox" id="edit-${index}" value="${player.name}"></div><br>`;
 
@@ -85,6 +93,15 @@ function createTimers() {
 	timers.innerHTML = timerHTML;
 	document.getElementById('name-modal-boxes').innerHTML = modalInputs;
 	document.getElementById('penalty-modal-boxes').innerHTML = modalPenalty;
+}
+
+function removeTimer(index) {
+	timerArray[index] = '';
+	var newTimers = '';
+	timerArray.forEach((timer) => {
+		newTimers += timer;
+	});
+	timers.innerHTML = newTimers;
 }
 
 function saveNames() {
@@ -140,6 +157,7 @@ function playerFinished(player) {
 	if (!playersRemaining) {
 		clearInterval(timerFunc);
 	}
+	removeTimer(idx);
 }
 
 function gameOver(donePlayers) {
@@ -164,7 +182,6 @@ function showResults(player, rank) {
 					</div>`;
 
 	document.getElementById('results-display').innerHTML = resultsHTML;
-	console.log(player);
 }
 
 function showRankings() {
@@ -220,6 +237,9 @@ function addPenalties(time, penalties) {
 	} else if (sec > 60) {
 		min++;
 		sec = sec - 60;
+		if (sec < 10) {
+			sec = '0' + sec;
+		}
 	}
 
 	var newTime = min + ':' + sec + '.' + milli;
