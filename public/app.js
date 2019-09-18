@@ -35,15 +35,12 @@ document.getElementById('penalty-modal-save').addEventListener('click', () => {
 
 document.getElementById('num-players').addEventListener('click', () => {
 	numPlayers = document.getElementById('num-players').value;
-	document.getElementById('results-display').innerHTML = resultsHTML = '';
-	createPlayers(numPlayers);
+	newGame();
 });
 
 document.getElementById('btnSimulate').addEventListener('click', () => {
 	document.getElementById('num-players').disabled = true;
-	document.getElementById('results-display').innerHTML = resultsHTML = '';
-	createPlayers(numPlayers);
-
+	newGame();
 	sortedPlayers = [];
 	players.forEach((player) => {
 		player.time = '0:00.00';
@@ -52,6 +49,12 @@ document.getElementById('btnSimulate').addEventListener('click', () => {
 	});
 	socket.emit('simulate', { players, maxLength: 5 });
 });
+
+function newGame() {
+	document.getElementById('btnPenalties').style.display = 'none';
+	createPlayers(numPlayers);
+	document.getElementById('results-display').innerHTML = resultsHTML = '';
+}
 
 function createPlayers(num) {
 	if (num <= players.length) {
