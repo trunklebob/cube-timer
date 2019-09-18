@@ -10,7 +10,6 @@ socket.on('player_finished', (player) => {
 });
 
 socket.on('finished', (players) => {
-	console.log(players);
 	gameOver(players);
 });
 let timerHTML = '';
@@ -164,7 +163,7 @@ function gameOver(donePlayers) {
 	donePlayers.forEach((player) => {
 		drawTime(player);
 	});
-	setTimeout(showRankings(), 750);
+	setTimeout(showRankings, 750);
 	document.getElementById('num-players').disabled = false;
 	document.getElementById('btnPenalties').style.display = 'block';
 }
