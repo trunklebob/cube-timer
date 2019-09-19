@@ -22,16 +22,35 @@ let numPlayers = 1;
 let playersRemaining = players.length;
 const timers = document.getElementById('timers-display');
 let bannerValues = [
-	{ color: 'red', text: 'select players and enter names' },
-	{ color: 'yellow', text: 'players get ready' },
-	{ color: 'green', text: 'solve!!' },
-	{ color: 'dodgerblue', text: 'awaiting final results from judges' },
-	{ color: 'purple', text: 'Final results: the winner is ' }
+	{
+		color:
+			'linear-gradient(to right, rgb(167, 29, 49), rgb(63, 13, 18), rgb(63, 13, 18), rgb(63, 13, 18), rgb(167, 29, 49))',
+		text: 'select players and enter names'
+	},
+	{
+		color: 'linear-gradient(to right, rgb(236,159,5), rgb(255,78,0), rgb(255,78,0), rgb(255,78,0), rgb(236,159,5))',
+		text: 'players, get ready!'
+	},
+	{
+		color:
+			'linear-gradient(to right, rgb(99,212,113), rgb(35,51,41), rgb(35,51,41), rgb(35,51,41), rgb(99,212,113))',
+		text: 'solve!!!'
+	},
+	{
+		color:
+			'linear-gradient(to right, rgb(0,159,253), rgb(42,42,114), rgb(42,42,114), rgb(42,42,114), rgb(0,159,253))',
+		text: 'awaiting final results from judges'
+	},
+	{
+		color:
+			'linear-gradient(to right, rgb(164,80,139), rgb(95,10,135), rgb(95,10,135), rgb(95,10,135), rgb(164,80,139))',
+		text: 'the winner is '
+	}
 ];
 let banner = [ document.getElementById('banner'), document.getElementById('banner-text') ];
 
 createPlayers(numPlayers);
-banner[0].style.backgroundColor = bannerValues[0].color;
+banner[0].style.backgroundImage = bannerValues[0].color;
 banner[1].innerHTML = bannerValues[0].text;
 
 document.getElementById('name-modal-save').addEventListener('click', () => {
@@ -44,13 +63,17 @@ document.getElementById('penalty-modal-save').addEventListener('click', () => {
 
 document.getElementById('num-players').addEventListener('click', () => {
 	numPlayers = document.getElementById('num-players').value;
-	banner[0].style.backgroundColor = bannerValues[0].color;
+	banner[0].style.backgroundImage = bannerValues[0].color;
 	banner[1].innerHTML = bannerValues[0].text;
 	newGame();
 });
 
 document.getElementById('btnStage').addEventListener('click', () => {
-	banner[0].style.backgroundColor = bannerValues[1].color;
+	if (nameModal.style.display === 'block') {
+		saveNames();
+		nameModal.style.display = 'none';
+	}
+	banner[0].style.backgroundImage = bannerValues[1].color;
 	banner[1].innerHTML = bannerValues[1].text;
 	document.getElementById('num-players').disabled = true;
 	penaltyModal.style.display = 'none';
@@ -63,7 +86,7 @@ document.getElementById('btnStage').addEventListener('click', () => {
 	});
 	setTimeout(() => {
 		socket.emit('simulate', { players, maxLength: 5 });
-		banner[0].style.backgroundColor = bannerValues[2].color;
+		banner[0].style.backgroundImage = bannerValues[2].color;
 		banner[1].innerHTML = bannerValues[2].text;
 	}, 2000);
 });
@@ -175,7 +198,7 @@ function gameOver(donePlayers) {
 	setTimeout(showRankings, 750);
 	document.getElementById('num-players').disabled = false;
 	penaltyModal.style.display = 'block';
-	banner[0].style.backgroundColor = bannerValues[3].color;
+	banner[0].style.backgroundImage = bannerValues[3].color;
 	banner[1].innerHTML = bannerValues[3].text;
 }
 
@@ -214,8 +237,8 @@ function assessPenalty() {
 		document.getElementById('timers-display').innerHTML = resultsHTML;
 	});
 	showRankings();
-	banner[0].style.backgroundColor = bannerValues[4].color;
-	banner[1].innerHTML = bannerValues[4].text + sortedPlayers[0].name;
+	banner[0].style.backgroundImage = bannerValues[4].color;
+	banner[1].innerHTML = bannerValues[4].text + sortedPlayers[0].name + '!';
 }
 
 function sortTimes(players) {
