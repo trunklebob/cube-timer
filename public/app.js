@@ -29,7 +29,6 @@ document.getElementById('name-modal-save').addEventListener('click', () => {
 	nameModal.style.display = 'none';
 });
 document.getElementById('penalty-modal-save').addEventListener('click', () => {
-	penaltyModal.style.display = 'none';
 	assessPenalty();
 });
 
@@ -38,8 +37,9 @@ document.getElementById('num-players').addEventListener('click', () => {
 	newGame();
 });
 
-document.getElementById('btnSimulate').addEventListener('click', () => {
+document.getElementById('btnStage').addEventListener('click', () => {
 	document.getElementById('num-players').disabled = true;
+	penaltyModal.style.display = 'none';
 	newGame();
 	sortedPlayers = [];
 	players.forEach((player) => {
@@ -51,9 +51,8 @@ document.getElementById('btnSimulate').addEventListener('click', () => {
 });
 
 function newGame() {
-	document.getElementById('btnPenalties').style.display = 'none';
+	penaltyModal.style.display = 'none';
 	createPlayers(numPlayers);
-	document.getElementById('results-display').innerHTML = resultsHTML = '';
 }
 
 function createPlayers(num) {
@@ -95,15 +94,6 @@ function createTimers() {
 	timers.innerHTML = timerHTML;
 	document.getElementById('name-modal-boxes').innerHTML = modalInputs;
 	document.getElementById('penalty-modal-boxes').innerHTML = modalPenalty;
-}
-
-function removeTimer(index) {
-	timerArray[index] = '';
-	var newTimers = '';
-	timerArray.forEach((timer) => {
-		newTimers += timer;
-	});
-	timers.innerHTML = newTimers;
 }
 
 function saveNames() {
@@ -154,12 +144,10 @@ function playerFinished(player) {
 	players[idx] = player;
 	player.ogTime = player.time;
 	sortedPlayers.push(player);
-	showResults(player, sortedPlayers.length);
 	playersRemaining--;
 	if (!playersRemaining) {
 		clearInterval(timerFunc);
 	}
-	removeTimer(idx);
 }
 
 function gameOver(donePlayers) {
@@ -168,7 +156,7 @@ function gameOver(donePlayers) {
 	});
 	setTimeout(showRankings, 750);
 	document.getElementById('num-players').disabled = false;
-	document.getElementById('btnPenalties').style.display = 'block';
+	penaltyModal.style.display = 'block';
 }
 
 function showResults(player, rank) {
@@ -182,8 +170,6 @@ function showResults(player, rank) {
 							</h2>
 						</div>
 					</div>`;
-
-	document.getElementById('results-display').innerHTML = resultsHTML;
 }
 
 function showRankings() {
@@ -205,6 +191,7 @@ function assessPenalty() {
 	resultsHTML = '';
 	sortedPlayers.forEach((player) => {
 		showResults(player, sortedPlayers.indexOf(player) + 1);
+		document.getElementById('timers-display').innerHTML = resultsHTML;
 	});
 	showRankings();
 }
@@ -253,11 +240,7 @@ function addPenalties(time, penalties) {
 const nameModal = document.getElementById('nameModal');
 const penaltyModal = document.getElementById('penaltyModal');
 const btnNames = document.getElementById('btnNames');
-const btnPenalties = document.getElementById('btnPenalties');
 const span = document.getElementsByClassName('close')[0];
 btnNames.onclick = function showModal() {
 	nameModal.style.display = 'block';
-};
-btnPenalties.onclick = function showModal() {
-	penaltyModal.style.display = 'block';
 };

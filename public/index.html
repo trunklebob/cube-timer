@@ -10,7 +10,7 @@
 
         <div class="container">
             <div class="numSelect">
-                <div><button class="button" id="btnSimulate">Simulate</button></div>
+                <div><button class="button" id="btnStage">Stage</button></div>
                 <br>
                 <span class="select-div"><label class="select-label" for="num-players">players:&nbsp;</label>
                 <select class="select" id="num-players">
@@ -22,10 +22,8 @@
                 </select></span>
                 <br>
                 <br>
-                <div><button class="button" id="btnNames">Edit Names</button></div><br>
-                <div><button class="button" id="btnPenalties">Penalties?</button></div>
+                <div><button class="button" id="btnNames">Edit Names</button></div>
                 <br>
-                
 
                 <div id="nameModal" class="modal">
                     <div class="modal-content">
@@ -38,11 +36,11 @@
 
                 <div id="penaltyModal" class="modal">
                     <div class="modal-content">
-                        <p><weak>2 seconds per penalty</weak></p>
+                        <p><span class="span-penalty">2 seconds per penalty</span class="span-penalty"></p>
                         <div id="penalty-modal-boxes">
                             <!-- Modal content --> 
                         </div>
-                    <button class="button" id='penalty-modal-save'>Assess</button>
+                    <button class="button" id='penalty-modal-save'>Finalize</button>
                     </div>
                 </div>
             </div>
@@ -54,12 +52,7 @@
                         <!-- filled by javascript -->
                     </div>
                 </div>
-                <div id="results">
-                    <h2 id="results-head">Results</h2>
-                    <div id="results-display">
-                        <!-- filled by javascript -->
-                    </div>
-                </div>
+
             </div>
         </div>
  
