@@ -4,12 +4,26 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const timerFn = require('./timer');
+const Gpio = require('onoff').Gpio;
 
 const port = process.env.PORT || 3000;
+
+// const LED1 = new Gpio(4, 'out'); //use GPIO pin 4 as output
+// const LED2 = new Gpio(5, 'out'); //use GPIO pin 4 as output
+// const LED3 = new Gpio(6, 'out'); //use GPIO pin 4 as output
+// const LED4 = new Gpio(13, 'out'); //use GPIO pin 4 as output
+// const LEDMaster = new Gpio(19, 'out');
+
+// const BUTTON1 = new Gpio(18, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+// const BUTTON2 = new Gpio(23, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+// const BUTTON3 = new Gpio(24, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+// const BUTTON4 = new Gpio(25, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+// const BUTTONMaster = new Gpio(12, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
 
 const timer = timerFn('myTimer');
 let playersRemaining = 0;
 let timeouts = [];
+let arrayPlayers = [];
 
 io.on('connection', (socket) => {
     socket.on('timer_reset', () => {
@@ -22,9 +36,10 @@ io.on('connection', (socket) => {
         timer.start();
     });
 
-    socket.on('simulate', (simReq) => {
+    socket.on('stage', (simReq) => {
         const { players, maxLength } = simReq;
-        simEvent(players, maxLength);
+        arrayPlayers = players;
+        simEvent(maxLength);
     });
 });
 
@@ -32,12 +47,13 @@ app.use(express.static('public'));
 
 http.listen(port, () => {});
 
-function simEvent(players, maxLength) {
+function simEvent(maxLength) {
     playersRemaining = 0;
-    if (!players.length) {
+    if (!arrayPlayers.length) {
         return;
     }
-    playersRemaining = players.length;
+    playersRemaining = arrayPlayers.length;
+    console.log(playersRemaining);
     if (timer.isRunning) {
         timer.stop();
     }
@@ -51,7 +67,7 @@ function simEvent(players, maxLength) {
     timer.clear();
     timer.start();
     io.emit('begin');
-    players.forEach((player) => {
+    arrayPlayers.forEach((player) => {
         const timerId = setTimeout(() => { playerFinished(player); }, getRandomInt((maxLength * 500), maxLength * 1000));
         timeouts.push(timerId);
     });
@@ -60,14 +76,15 @@ function simEvent(players, maxLength) {
         const finishedPlayer = { ...player };
         finishedPlayer.time = timer.currTime();
         finishedPlayer.finished = true;
+        console.log('player_finished', JSON.stringify(finishedPlayer));
         playersRemaining--;
         io.emit('player_finished', finishedPlayer);
-        const idx = players.findIndex((x) => x.id === finishedPlayer.id);
+        const idx = arrayPlayers.findIndex((x) => x.id === finishedPlayer.id);
         // eslint-disable-next-line no-param-reassign
-        players[idx] = finishedPlayer;
+        arrayPlayers[idx] = finishedPlayer;
         if (!playersRemaining) {
             timer.stop();
-            allDone(players);
+            allDone();
         }
     }
 }
@@ -76,6 +93,9 @@ function getRandomInt(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-function allDone(players) {
-    io.emit('finished', players);
+function allDone() {
+    io.emit('finished', arrayPlayers);
+}
+function playerActive(number) {
+    return arrayPlayers.length <= number && !arrayPlayers[number-1].finished;
 }
