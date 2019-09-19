@@ -8,7 +8,20 @@ const gpio = require('onoff').Gpio;
 
 const port = process.env.PORT || 3000;
 
+const LED1 = new Gpio(4, 'out'); //use GPIO pin 4 as output
+const LED2 = new Gpio(5, 'out'); //use GPIO pin 4 as output
+const LED3 = new Gpio(6, 'out'); //use GPIO pin 4 as output
+const LED4 = new Gpio(13, 'out'); //use GPIO pin 4 as output
+const LEDMaster = new Gpio(19, 'out');
+
+const BUTTON1 = new Gpio(18, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+const BUTTON2 = new Gpio(23, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+const BUTTON3 = new Gpio(24, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+const BUTTON4 = new Gpio(25, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+const BUTTONMaster = new Gpio(12, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+
 const timer = timerFn('myTimer');
+let timerRunning = false;
 let playersRemaining = 0;
 let timeouts = [];
 
