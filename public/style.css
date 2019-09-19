@@ -94,7 +94,7 @@ body {
 	padding: 0 .5rem;
 }
 .player-h2 {
-	border: blue 5px solid;
+	border: dodgerblue 5px solid;
 	border-radius: 30px;
 	padding: .5rem 0;
 	position: relative;
@@ -103,7 +103,7 @@ body {
 }
 
 .player-results {
-	border: blue 5px solid;
+	border: dodgerblue 5px solid;
 	border-radius: 30px;
 	padding: .5rem 0;
 	position: relative;
@@ -145,7 +145,7 @@ body {
 	text-align: center;
 	font-size: 4rem;
 	font-weight: 700;
-	background-color: blue;
+	background-color: dodgerblue;
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
@@ -157,21 +157,21 @@ body {
 	margin-bottom: 2rem;
 }
 .rankings-container:first-child > .rankings {
-	background-image: linear-gradient(to right, #ffcf40, #ffbf00, #bf9b30, #a67c00, #bf9b30, #ffbf00, #ffcf40);
+	background-image: linear-gradient(to right, #ffcf40, #ffbf00, #bf9b30, #a67c00, #a67c00, #bf9b30, #ffbf00, #ffcf40);
 	letter-spacing: -.5rem;
 	transform: skewY(-20deg) scale(1.8);
 	background-size: 400%;
 	animation: animate 2s linear infinite;
 }
 .rankings-container:nth-child(2) > .rankings {
-	background-image: linear-gradient(to right, #d3d3d3, #c0c0c0, #a9a9a9, #808080, #a9a9a9, #c0c0c0, #d3d3d3);
+	background-image: linear-gradient(to right, #d3d3d3, #c0c0c0, #a9a9a9, #808080, #808080, #a9a9a9, #c0c0c0, #d3d3d3);
 	letter-spacing: -.5rem;
 	transform: skewY(-20deg) scale(1.5);
 	background-size: 400%;
 	animation: animate 2s linear infinite;
 }
 .rankings-container:nth-child(3) > .rankings {
-	background-image: linear-gradient(to right, #b08d57, #9c7a3c, #895e1a, #804a00, #895e1a, #9c7a3c, #b08d57);
+	background-image: linear-gradient(to right, #b08d57, #9c7a3c, #895e1a, #804a00, #804a00, #895e1a, #9c7a3c, #b08d57);
 	letter-spacing: -.5rem;
 	transform: skewY(-20deg) scale(1.3);
 	background-size: 400%;
