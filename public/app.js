@@ -21,8 +21,18 @@ let resultsHTML = '';
 let numPlayers = 1;
 let playersRemaining = players.length;
 const timers = document.getElementById('timers-display');
+let bannerValues = [
+	{ color: 'red', text: 'select players and enter names' },
+	{ color: 'yellow', text: 'players get ready' },
+	{ color: 'green', text: 'solve!!' },
+	{ color: 'dodgerblue', text: 'awaiting final results from judges' },
+	{ color: 'purple', text: 'Final results: the winner is ' }
+];
+let banner = [ document.getElementById('banner'), document.getElementById('banner-text') ];
 
 createPlayers(numPlayers);
+banner[0].style.backgroundColor = bannerValues[0].color;
+banner[1].innerHTML = bannerValues[0].text;
 
 document.getElementById('name-modal-save').addEventListener('click', () => {
 	saveNames();
@@ -34,10 +44,14 @@ document.getElementById('penalty-modal-save').addEventListener('click', () => {
 
 document.getElementById('num-players').addEventListener('click', () => {
 	numPlayers = document.getElementById('num-players').value;
+	banner[0].style.backgroundColor = bannerValues[0].color;
+	banner[1].innerHTML = bannerValues[0].text;
 	newGame();
 });
 
 document.getElementById('btnStage').addEventListener('click', () => {
+	banner[0].style.backgroundColor = bannerValues[1].color;
+	banner[1].innerHTML = bannerValues[1].text;
 	document.getElementById('num-players').disabled = true;
 	penaltyModal.style.display = 'none';
 	newGame();
@@ -47,7 +61,11 @@ document.getElementById('btnStage').addEventListener('click', () => {
 		player.finished = false;
 		drawTime(player);
 	});
-	socket.emit('simulate', { players, maxLength: 5 });
+	setTimeout(() => {
+		socket.emit('simulate', { players, maxLength: 5 });
+		banner[0].style.backgroundColor = bannerValues[2].color;
+		banner[1].innerHTML = bannerValues[2].text;
+	}, 2000);
 });
 
 function newGame() {
@@ -157,6 +175,8 @@ function gameOver(donePlayers) {
 	setTimeout(showRankings, 750);
 	document.getElementById('num-players').disabled = false;
 	penaltyModal.style.display = 'block';
+	banner[0].style.backgroundColor = bannerValues[3].color;
+	banner[1].innerHTML = bannerValues[3].text;
 }
 
 function showResults(player, rank) {
@@ -194,6 +214,8 @@ function assessPenalty() {
 		document.getElementById('timers-display').innerHTML = resultsHTML;
 	});
 	showRankings();
+	banner[0].style.backgroundColor = bannerValues[4].color;
+	banner[1].innerHTML = bannerValues[4].text + sortedPlayers[0].name;
 }
 
 function sortTimes(players) {
