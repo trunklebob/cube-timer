@@ -82,7 +82,7 @@ document.getElementById('btnStage').addEventListener('click', () => {
 		player.finished = false;
 		drawTime(player);
 	});
-	socket.emit('stage', { players, maxLength: 5 });
+	socket.emit('stage', players);
 });
 
 function newGame() {

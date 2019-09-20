@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
     socket.on('message', (data) => { console.log(data); });
 
     socket.on('stage', (simReq) => {
-        const { players, maxLength } = simReq;
+        const { players } = simReq;
         arrayPlayers = players;
         console.log(arrayPlayers, players)
         stageEvent();
