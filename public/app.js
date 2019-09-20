@@ -16,7 +16,7 @@ socket.on('finished', (players) => {
 });
 
 socket.on('stage', (recvPlayers) => {
-	console.log(recvPlayers);
+	console.log('stage', recvPlayers);
 	players = recvPlayers
 });
 
@@ -88,7 +88,7 @@ document.getElementById('btnStage').addEventListener('click', () => {
 		player.finished = false;
 		drawTime(player);
 	});
-	socket.emit('stage', players);
+	socket.broadcast.emit('stage', players);
 });
 
 function newGame() {
