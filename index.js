@@ -48,7 +48,7 @@ BUTTON1.watch((err, value) => {
         console.error('There was an error', err); //output error message to console
       return;
     }
-    if (staged && playerActive(PLAYER) && timer.isRunning) {
+    if (staged && playerActive(PLAYER) && timer.isRunning()) {
         playerFinished(arrayPlayers[PLAYER - 1]);
     }
 });
@@ -60,7 +60,7 @@ BUTTON2.watch((err, value) => {
         console.error('There was an error', err); //output error message to console
       return;
     }
-    if (playerActive(PLAYER) && timer.isRunning) {
+    if (playerActive(PLAYER) && timer.isRunning()) {
         playerFinished(arrayPlayers[PLAYER - 1]);
     }
 });
@@ -72,7 +72,7 @@ BUTTON3.watch((err, value) => {
         console.error('There was an error', err); //output error message to console
       return;
     }
-    if (playerActive(PLAYER) && timer.isRunning) {
+    if (playerActive(PLAYER) && timer.isRunning()) {
         playerFinished(arrayPlayers[PLAYER - 1]);
     }
 });
@@ -84,19 +84,19 @@ BUTTON4.watch((err, value) => {
         console.error('There was an error', err); //output error message to console
       return;
     }
-    if (playerActive(PLAYER) && timer.isRunning) {
+    if (playerActive(PLAYER) && timer.isRunning()) {
         playerFinished(arrayPlayers[PLAYER - 1]);
     }
 });
 
 BUTTONMaster.watch((err, value) => {
-    console.log('button master', timer.isRunning, staged);
+    console.log('button master', timer.isRunning(), staged);
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
       return;
     }
 
-    if (!timer.isRunning && staged) {
+    if (!timer.isRunning() && staged) {
         startEvent();
     }
 });
@@ -108,7 +108,7 @@ function simEvent(maxLength) {
     }
     playersRemaining = arrayPlayers.length;
     console.log(playersRemaining);
-    if (timer.isRunning) {
+    if (timer.isRunning()) {
         timer.stop();
     }
 
@@ -140,7 +140,7 @@ function stageEvent() {
         return;
     }
     playersRemaining = arrayPlayers.length;
-    if (timer.isRunning) {
+    if (timer.isRunning()) {
         timer.stop();
     }
 
