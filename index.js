@@ -36,6 +36,10 @@ io.on('connection', (socket) => {
         console.log(arrayPlayers, players)
         stageEvent();
     });
+
+    socket.on('finalize', (data) => {
+        socket.broadcast.emit('finalize', data);
+    });
 });
 
 app.use(express.static('public'));
