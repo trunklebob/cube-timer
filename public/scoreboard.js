@@ -23,6 +23,7 @@ socket.on('stage', (recvPlayers) => {
 		createTimers();
 		banner[0].style.backgroundImage = bannerValues[1].color;
 		banner[1].innerHTML = bannerValues[1].text;
+		playersRemaining = players.length;
 	}
 });
 
