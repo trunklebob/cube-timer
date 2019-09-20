@@ -3,6 +3,8 @@ const socket = io();
 let timerFunc;
 socket.on('begin', () => {
 	startTimer();
+	banner[0].style.backgroundImage = bannerValues[2].color;
+	banner[1].innerHTML = bannerValues[2].text;
 });
 
 socket.on('player_finished', (player) => {
@@ -81,8 +83,6 @@ document.getElementById('btnStage').addEventListener('click', () => {
 		drawTime(player);
 	});
 	socket.emit('stage', { players, maxLength: 5 });
-	banner[0].style.backgroundImage = bannerValues[2].color;
-	banner[1].innerHTML = bannerValues[2].text;
 });
 
 function newGame() {
