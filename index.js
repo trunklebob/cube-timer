@@ -119,7 +119,7 @@ function simEvent(maxLength) {
     }
     timer.clear();
     timer.start();
-    io.broadcast.emit('begin', arrayPlayers);
+    io.emit('begin', arrayPlayers);
     arrayPlayers.forEach((player) => {
         const timerId = setTimeout(() => { playerFinished(player); }, getRandomInt((maxLength * 500), maxLength * 1000));
         timeouts.push(timerId);
@@ -128,7 +128,7 @@ function simEvent(maxLength) {
 
 function startEvent() {
     timer.start();
-    io.broadcast.emit('begin');
+    io.emit('begin');
     staged = false;
 }
 
@@ -152,7 +152,7 @@ function playerFinished(player) {
     finishedPlayer.finished = true;
     console.log('player_finished', JSON.stringify(finishedPlayer));
     playersRemaining--;
-    io.broadcast.emit('player_finished', finishedPlayer);
+    io.emit('player_finished', finishedPlayer);
     const idx = arrayPlayers.findIndex((x) => x.id === finishedPlayer.id);
     // eslint-disable-next-line no-param-reassign
     arrayPlayers[idx] = finishedPlayer;
@@ -166,7 +166,7 @@ function getRandomInt(min, max) {
 }
 
 function allDone() {
-    io.broadcast.emit('finished', arrayPlayers);
+    io.emit('finished', arrayPlayers);
 }
 function playerActive(number) {
     return arrayPlayers.length && arrayPlayers.length >= number && !arrayPlayers[number-1].finished;

@@ -88,7 +88,7 @@ document.getElementById('btnStage').addEventListener('click', () => {
 		player.finished = false;
 		drawTime(player);
 	});
-	socket.broadcast.emit('stage', players);
+	io.emit('stage', players);
 });
 
 function newGame() {
