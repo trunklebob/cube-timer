@@ -42,7 +42,7 @@ app.use(express.static('public'));
 http.listen(port, () => {});
 
 BUTTON1.watch((err, value) => {
-    console.log('button 1', arrayPlayers);
+    console.log('button 1');
     const PLAYER = 1;
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
@@ -171,5 +171,6 @@ function allDone() {
     io.emit('finished', arrayPlayers);
 }
 function playerActive(number) {
+    console.log(number, arrayplayers)
     return arrayPlayers.length && arrayPlayers.length <= number && !arrayPlayers[number-1].finished;
 }
