@@ -48,7 +48,7 @@ BUTTON1.watch((err, value) => {
         console.error('There was an error', err); //output error message to console
       return;
     }
-    if (staged && playerActive(PLAYER) && timer.isRunning()) {
+    if (playerActive(PLAYER) && timer.isRunning()) {
         playerFinished(arrayPlayers[PLAYER - 1]);
     }
 });
@@ -171,5 +171,5 @@ function allDone() {
     io.emit('finished', arrayPlayers);
 }
 function playerActive(number) {
-    return arrayPlayers.length <= number && !arrayPlayers[number-1].finished;
+    return arrayPlayers.length && arrayPlayers.length <= number && !arrayPlayers[number-1].finished;
 }
