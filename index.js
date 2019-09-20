@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
 
     socket.on('stage', (simReq) => {
         const players = simReq;
+        socket.broadcast.emit('stage', players);
         arrayPlayers = players;
         console.log(arrayPlayers, players)
         stageEvent();
