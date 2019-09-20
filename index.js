@@ -32,6 +32,7 @@ io.on('connection', (socket) => {
     socket.on('stage', (simReq) => {
         const { players, maxLength } = simReq;
         arrayPlayers = players;
+        console.log(arrayPlayers, players)
         stageEvent();
     });
 });
@@ -47,7 +48,7 @@ BUTTON1.watch((err, value) => {
         console.error('There was an error', err); //output error message to console
       return;
     }
-    if (playerActive(PLAYER) && timer.isRunning) {
+    if (staged && playerActive(PLAYER) && timer.isRunning) {
         playerFinished(arrayPlayers[PLAYER - 1]);
     }
 });
@@ -89,6 +90,7 @@ BUTTON4.watch((err, value) => {
 });
 
 BUTTONMaster.watch((err, value) => {
+    console.log('button master ');
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
       return;
