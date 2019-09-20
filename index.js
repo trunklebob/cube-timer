@@ -8,22 +8,19 @@ const Gpio = require('onoff').Gpio;
 
 const port = process.env.PORT || 3000;
 
-// const LED1 = new Gpio(4, 'out'); //use GPIO pin 4 as output
-// const LED2 = new Gpio(5, 'out'); //use GPIO pin 4 as output
-// const LED3 = new Gpio(6, 'out'); //use GPIO pin 4 as output
-// const LED4 = new Gpio(13, 'out'); //use GPIO pin 4 as output
-// const LEDMaster = new Gpio(19, 'out');
+const LEDMaster = new Gpio(19, 'out');
 
-// const BUTTON1 = new Gpio(18, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
-// const BUTTON2 = new Gpio(23, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
-// const BUTTON3 = new Gpio(24, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
-// const BUTTON4 = new Gpio(25, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
-// const BUTTONMaster = new Gpio(12, 'in', 'both'); //use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+const BUTTON1 = new Gpio(18, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 18 as input, and 'both' button presses, and releases should be handled
+const BUTTON2 = new Gpio(23, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 23 as input, and 'both' button presses, and releases should be handled
+const BUTTON3 = new Gpio(24, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 24 as input, and 'both' button presses, and releases should be handled
+const BUTTON4 = new Gpio(25, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 25 as input, and 'both' button presses, and releases should be handled
+const BUTTONMaster = new Gpio(12, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 12 as input, and 'both' button presses, and releases should be handled
 
 const timer = timerFn('myTimer');
 let playersRemaining = 0;
 let timeouts = [];
 let arrayPlayers = [];
+let staged = false;
 
 io.on('connection', (socket) => {
     socket.on('timer_reset', () => {
@@ -32,20 +29,71 @@ io.on('connection', (socket) => {
 
     socket.on('message', (data) => { console.log(data); });
 
-    socket.on('timer_start', () => {
-        timer.start();
-    });
-
     socket.on('stage', (simReq) => {
         const { players, maxLength } = simReq;
         arrayPlayers = players;
-        simEvent(maxLength);
+        stageEvent();
     });
 });
 
 app.use(express.static('public'));
 
 http.listen(port, () => {});
+
+BUTTON1.watch((err, value) => {
+    const PLAYER = 1;
+    if (err) { //if an error
+        console.error('There was an error', err); //output error message to console
+      return;
+    }
+    if (playerActive(PLAYER) && timer.isRunning) {
+        playerFinished(arrayPlayers[PLAYER - 1]);
+    }
+});
+
+BUTTON2.watch((err, value) => {
+    const PLAYER = 2;
+    if (err) { //if an error
+        console.error('There was an error', err); //output error message to console
+      return;
+    }
+    if (playerActive(PLAYER) && timer.isRunning) {
+        playerFinished(arrayPlayers[PLAYER - 1]);
+    }
+});
+
+BUTTON3.watch((err, value) => {
+    const PLAYER = 3;
+    if (err) { //if an error
+        console.error('There was an error', err); //output error message to console
+      return;
+    }
+    if (playerActive(PLAYER) && timer.isRunning) {
+        playerFinished(arrayPlayers[PLAYER - 1]);
+    }
+});
+
+BUTTON4.watch((err, value) => {
+    const PLAYER = 4;
+    if (err) { //if an error
+        console.error('There was an error', err); //output error message to console
+      return;
+    }
+    if (playerActive(PLAYER) && timer.isRunning) {
+        playerFinished(arrayPlayers[PLAYER - 1]);
+    }
+});
+
+BUTTONMaster.watch((err, value) => {
+    if (err) { //if an error
+        console.error('There was an error', err); //output error message to console
+      return;
+    }
+
+    if (!timer.isRunning && staged) {
+        startEvent();
+    }
+});
 
 function simEvent(maxLength) {
     playersRemaining = 0;
@@ -66,29 +114,48 @@ function simEvent(maxLength) {
     }
     timer.clear();
     timer.start();
-    io.emit('begin');
+    io.emit('begin', arrayPlayers);
     arrayPlayers.forEach((player) => {
         const timerId = setTimeout(() => { playerFinished(player); }, getRandomInt((maxLength * 500), maxLength * 1000));
         timeouts.push(timerId);
     });
-
-    function playerFinished(player) {
-        const finishedPlayer = { ...player };
-        finishedPlayer.time = timer.currTime();
-        finishedPlayer.finished = true;
-        console.log('player_finished', JSON.stringify(finishedPlayer));
-        playersRemaining--;
-        io.emit('player_finished', finishedPlayer);
-        const idx = arrayPlayers.findIndex((x) => x.id === finishedPlayer.id);
-        // eslint-disable-next-line no-param-reassign
-        arrayPlayers[idx] = finishedPlayer;
-        if (!playersRemaining) {
-            timer.stop();
-            allDone();
-        }
-    }
 }
 
+function startEvent() {
+    timer.start();
+    io.emit('begin');
+    staged = false;
+}
+
+function stageEvent() {
+    playersRemaining = 0;
+    if (!arrayPlayers.length) {
+        return;
+    }
+    playersRemaining = arrayPlayers.length;
+    if (timer.isRunning) {
+        timer.stop();
+    }
+
+    timer.clear();
+    staged = true; 
+}
+
+function playerFinished(player) {
+    const finishedPlayer = { ...player };
+    finishedPlayer.time = timer.currTime();
+    finishedPlayer.finished = true;
+    console.log('player_finished', JSON.stringify(finishedPlayer));
+    playersRemaining--;
+    io.emit('player_finished', finishedPlayer);
+    const idx = arrayPlayers.findIndex((x) => x.id === finishedPlayer.id);
+    // eslint-disable-next-line no-param-reassign
+    arrayPlayers[idx] = finishedPlayer;
+    if (!playersRemaining) {
+        timer.stop();
+        allDone();
+    }
+}
 function getRandomInt(min, max) {
     return Math.random() * (max - min) + min;
 }
