@@ -43,7 +43,7 @@ http.listen(port, () => {});
 
 BUTTON1.watch((err, value) => {
     const PLAYER = 1;
-    console.log('button 1', console.log(playerActive(1)));
+    console.log('button 1');
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
       return;
@@ -107,7 +107,6 @@ function simEvent(maxLength) {
         return;
     }
     playersRemaining = arrayPlayers.length;
-    console.log(playersRemaining);
     if (timer.isRunning()) {
         timer.stop();
     }
@@ -128,7 +127,6 @@ function simEvent(maxLength) {
 }
 
 function startEvent() {
-    console.log('startEvent')
     timer.start();
     io.emit('begin');
     staged = false;
@@ -171,6 +169,5 @@ function allDone() {
     io.emit('finished', arrayPlayers);
 }
 function playerActive(number) {
-    console.log(number, arrayPlayers)
-    return arrayPlayers.length && arrayPlayers.length <= number && !arrayPlayers[number-1].finished;
+    return arrayPlayers.length && arrayPlayers.length >= number && !arrayPlayers[number-1].finished;
 }
