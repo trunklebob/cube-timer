@@ -14,6 +14,12 @@ socket.on('player_finished', (player) => {
 socket.on('finished', (players) => {
 	gameOver(players);
 });
+
+socket.on('staged', (recvPlayers) => {
+	console.log(recvPlayers);
+	players = recvPlayers
+});
+
 let timerHTML = '';
 let beginTime = 0;
 let players = [];
