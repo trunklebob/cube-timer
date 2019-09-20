@@ -10,11 +10,11 @@ const port = process.env.PORT || 3000;
 
 const LEDMaster = new Gpio(19, 'out');
 
-const BUTTON1 = new Gpio(18, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 18 as input, and 'both' button presses, and releases should be handled
-const BUTTON2 = new Gpio(23, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 23 as input, and 'both' button presses, and releases should be handled
-const BUTTON3 = new Gpio(24, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 24 as input, and 'both' button presses, and releases should be handled
-const BUTTON4 = new Gpio(25, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 25 as input, and 'both' button presses, and releases should be handled
-const BUTTONMaster = new Gpio(12, 'in', 'both', {debounceTimeout: 10}); //use GPIO pin 12 as input, and 'both' button presses, and releases should be handled
+const BUTTON1 = new Gpio(18, 'in', 'rising', {debounceTimeout: 10}); //use GPIO pin 18 as input, and 'both' button presses, and releases should be handled
+const BUTTON2 = new Gpio(23, 'in', 'rising', {debounceTimeout: 10}); //use GPIO pin 23 as input, and 'both' button presses, and releases should be handled
+const BUTTON3 = new Gpio(24, 'in', 'rising', {debounceTimeout: 10}); //use GPIO pin 24 as input, and 'both' button presses, and releases should be handled
+const BUTTON4 = new Gpio(25, 'in', 'rising', {debounceTimeout: 10}); //use GPIO pin 25 as input, and 'both' button presses, and releases should be handled
+const BUTTONMaster = new Gpio(12, 'in', 'rising', {debounceTimeout: 10}); //use GPIO pin 12 as input, and 'both' button presses, and releases should be handled
 
 const timer = timerFn('myTimer');
 let playersRemaining = 0;
