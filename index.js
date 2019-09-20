@@ -41,6 +41,7 @@ app.use(express.static('public'));
 http.listen(port, () => {});
 
 BUTTON1.watch((err, value) => {
+    console.log('button 1', arrayPlayers);
     const PLAYER = 1;
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
@@ -52,6 +53,7 @@ BUTTON1.watch((err, value) => {
 });
 
 BUTTON2.watch((err, value) => {
+    console.log('button 2');
     const PLAYER = 2;
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
@@ -63,6 +65,7 @@ BUTTON2.watch((err, value) => {
 });
 
 BUTTON3.watch((err, value) => {
+    console.log('button 3');
     const PLAYER = 3;
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
@@ -74,6 +77,7 @@ BUTTON3.watch((err, value) => {
 });
 
 BUTTON4.watch((err, value) => {
+    console.log('button 4');
     const PLAYER = 4;
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
