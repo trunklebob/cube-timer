@@ -20,7 +20,7 @@ socket.on('stage', (recvPlayers) => {
 		console.log('stage', recvPlayers);
 		players = recvPlayers;
 		// penaltyModal.style.display = 'none';
-		createTimers;
+		createTimers();
 		banner[0].style.backgroundImage = bannerValues[1].color;
 		banner[1].innerHTML = bannerValues[1].text;
 	}
