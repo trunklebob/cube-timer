@@ -23,27 +23,23 @@ let playersRemaining = players.length;
 const timers = document.getElementById('timers-display');
 let bannerValues = [
 	{
-		color:
-			'linear-gradient(to right, rgb(167, 29, 49), rgb(63, 13, 18), rgb(63, 13, 18), rgb(63, 13, 18), rgb(167, 29, 49))',
+		color: 'linear-gradient(to right, rgb(167, 29, 49), rgb(63, 13, 18), rgb(63, 13, 18), rgb(167, 29, 49))',
 		text: 'select players and enter names'
 	},
 	{
-		color: 'linear-gradient(to right, rgb(236,159,5), rgb(255,78,0), rgb(255,78,0), rgb(255,78,0), rgb(236,159,5))',
+		color: 'linear-gradient(to right, rgb(236,159,5), rgb(255,78,0), rgb(255,78,0), rgb(236,159,5))',
 		text: 'players, get ready!'
 	},
 	{
-		color:
-			'linear-gradient(to right, rgb(99,212,113), rgb(35,51,41), rgb(35,51,41), rgb(35,51,41), rgb(99,212,113))',
+		color: 'linear-gradient(to right, rgb(99,212,113), rgb(35,51,41), rgb(35,51,41), rgb(99,212,113))',
 		text: 'solve!!!'
 	},
 	{
-		color:
-			'linear-gradient(to right, rgb(0,159,253), rgb(42,42,114), rgb(42,42,114), rgb(42,42,114), rgb(0,159,253))',
+		color: 'linear-gradient(to right, rgb(0,159,253), rgb(42,42,114), rgb(42,42,114), rgb(0,159,253))',
 		text: 'awaiting final results from judges'
 	},
 	{
-		color:
-			'linear-gradient(to right, rgb(164,80,139), rgb(95,10,135), rgb(95,10,135), rgb(95,10,135), rgb(164,80,139))',
+		color: 'linear-gradient(to right, rgb(164,80,139), rgb(95,10,135), rgb(95,10,135), rgb(164,80,139))',
 		text: 'the winner is '
 	}
 ];
