@@ -90,7 +90,7 @@ BUTTON4.watch((err, value) => {
 });
 
 BUTTONMaster.watch((err, value) => {
-    console.log('button master ');
+    console.log('button master', timer.isRunning, staged);
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
       return;
@@ -128,6 +128,7 @@ function simEvent(maxLength) {
 }
 
 function startEvent() {
+    console.log('startEvent')
     timer.start();
     io.emit('begin');
     staged = false;
