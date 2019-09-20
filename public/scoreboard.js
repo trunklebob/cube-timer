@@ -27,6 +27,19 @@ socket.on('stage', (recvPlayers) => {
 	}
 });
 
+socket.on('finalize', (recvPlayers) => {
+	sortedPlayers = [ ...recvPlayers ];
+	sortTimes(sortedPlayers);
+	resultsHTML = '';
+	sortedPlayers.forEach((player) => {
+		showResults(player, sortedPlayers.indexOf(player) + 1);
+		document.getElementById('timers-display').innerHTML = resultsHTML;
+	});
+	showRankings();
+	banner[0].style.backgroundImage = bannerValues[4].color;
+	banner[1].innerHTML = bannerValues[4].text + sortedPlayers[0].name + '!';
+});
+
 let timerHTML = '';
 let beginTime = 0;
 let players = [];

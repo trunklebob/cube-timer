@@ -245,6 +245,7 @@ function assessPenalty() {
 	showRankings();
 	banner[0].style.backgroundImage = bannerValues[4].color;
 	banner[1].innerHTML = bannerValues[4].text + sortedPlayers[0].name + '!';
+	socket.emit('finalize', sortedPlayers);
 }
 
 function sortTimes(players) {
