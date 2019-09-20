@@ -42,8 +42,8 @@ app.use(express.static('public'));
 http.listen(port, () => {});
 
 BUTTON1.watch((err, value) => {
-    console.log('button 1');
     const PLAYER = 1;
+    console.log('button 1', console.log(playerActive(1)));
     if (err) { //if an error
         console.error('There was an error', err); //output error message to console
       return;
