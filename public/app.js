@@ -16,8 +16,12 @@ socket.on('finished', (players) => {
 });
 
 socket.on('stage', (recvPlayers) => {
-	console.log('stage', recvPlayers);
-	players = recvPlayers
+	if (!master) {
+		console.log('stage', recvPlayers);
+		players = recvPlayers;
+		penaltyModal.style.display = 'none';
+		createPlayers(players.length);
+	}
 });
 
 let timerHTML = '';
@@ -25,6 +29,7 @@ let beginTime = 0;
 let players = [];
 let sortedPlayers = [];
 let timerArray = [];
+let master = false;
 let resultsHTML = '';
 let numPlayers = 1;
 let playersRemaining = players.length;
@@ -77,6 +82,7 @@ document.getElementById('btnStage').addEventListener('click', () => {
 		saveNames();
 		nameModal.style.display = 'none';
 	}
+	master = true;
 	banner[0].style.backgroundImage = bannerValues[1].color;
 	banner[1].innerHTML = bannerValues[1].text;
 	document.getElementById('num-players').disabled = true;
