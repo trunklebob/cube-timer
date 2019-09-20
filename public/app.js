@@ -15,7 +15,7 @@ socket.on('finished', (players) => {
 	gameOver(players);
 });
 
-socket.on('staged', (recvPlayers) => {
+socket.on('stage', (recvPlayers) => {
 	console.log(recvPlayers);
 	players = recvPlayers
 });
