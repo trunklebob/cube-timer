@@ -171,6 +171,6 @@ function allDone() {
     io.emit('finished', arrayPlayers);
 }
 function playerActive(number) {
-    console.log(number, arrayplayers)
+    console.log(number, arrayPlayers)
     return arrayPlayers.length && arrayPlayers.length <= number && !arrayPlayers[number-1].finished;
 }
