@@ -5,6 +5,7 @@ socket.on('begin', () => {
 	startTimer();
 	banner[0].style.backgroundImage = bannerValues[2].color;
 	banner[1].innerHTML = bannerValues[2].text;
+	saveNames();
 });
 
 socket.on('player_finished', (player) => {
